@@ -6,11 +6,8 @@ import { ArrowLeft, Maximize, Minimize } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { AdSlot } from '../components/AdSlot';
 
-// Setup pdf js worker
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
+// Setup pdf js worker — using CDN for broad browser compatibility (Safari/iOS)
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const PageContent = React.forwardRef(({ pageNumber, width, height }, ref) => {
     const isLeftPage = pageNumber % 2 === 0; // Page 1 is cover (right), Page 2 is left, Page 3 is right...
