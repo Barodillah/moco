@@ -1,13 +1,13 @@
 # PRD — Project Requirements Document
 
 ## 1. Overview
-Aplikasi **PDF to BOOK** dirancang untuk mengubah dokumen PDF statis menjadi pengalaman membaca buku digital yang interaktif dan menarik. Masalah utama yang diselesaikan adalah kesulitan membaca PDF biasa di perangkat mobile atau web yang terasa kaku. Solusinya adalah mengubah PDF menjadi format "flipbook" (efek balik halaman) yang dapat diakses melalui link unik. Aplikasi ini ditujukan untuk platform publik di mana pengguna umum dapat membaca, sementara uploader harus memiliki akun. Monetisasi dilakukan melalui penempatan iklan yang tidak mengganggu pengalaman membaca.
+Aplikasi **Moco** dirancang untuk mengubah dokumen PDF statis menjadi pengalaman membaca buku digital yang interaktif dan menarik. Masalah utama yang diselesaikan adalah kesulitan membaca PDF biasa di perangkat mobile atau web yang terasa kaku. Solusinya adalah mengubah PDF menjadi format "flipbook" (efek balik halaman) yang dapat diakses melalui link unik. Aplikasi ini ditujukan untuk platform publik di mana pengguna umum dapat membaca, sementara uploader harus memiliki akun. Monetisasi dilakukan melalui penempatan iklan yang tidak mengganggu pengalaman membaca.
 
 ## 2. Requirements
 Berikut adalah persyaratan utama agar aplikasi dapat berjalan sesuai tujuan:
 - **Aksesibilitas:** Buku yang sudah diupload harus bisa diakses oleh publik tanpa login, namun proses upload wajib login.
-- **Performa:** Halaman buku harus dimuat dengan cepat meskipun berukuran besar, dengan efek_animasi halaman yang halus.
-- **Keamanan:** Sistem autentikasi yang aman untuk melindungi akun pengguna dan防止 upload konten berbahaya.
+- **Performa:** Halaman buku harus dimuat dengan cepat meskipun berukuran besar, dengan efek animasi halaman yang halus.
+- **Keamanan:** Sistem autentikasi yang aman untuk melindungi akun pengguna dan mencegah upload konten berbahaya.
 - **Monetisasi:** Terdapat slot iklan yang strategis (misalnya di sela halaman atau sidebar) tanpa menutupi konten utama.
 - **Penyimpanan:** Sistem harus mampu menyimpan file PDF dan metadata buku dengan batas ukuran file yang dapat dikonfigurasi (Custom Limit).
 - **Branding:** Tampilan standar yang bersih dan fokus pada konten buku.
@@ -35,11 +35,11 @@ Sistem menggunakan arsitektur web modern di mana klien berinteraksi dengan serve
 ```mermaid
 flowchart TD
     User[Pengguna / Uploader] -->|1. Upload PDF| Client[Frontend - Next.js]
-    Client -->|2. Request API| Server[Backend API Routes]
-    Server -->|3. Cek Autentikasi| Auth[Service - Better Auth]
+    Client -->|2. Request API| Server[Backend API (PHP Native)]
+    Server -->|3. Cek Autentikasi| Auth[Service - Session/Token]
     Auth -->|4. Valid| Server
     Server -->|5. Simpan File| Storage[File Storage]
-    Server -->|6. Simpan Metadata| DB[(Database - SQLite)]
+    Server -->|6. Simpan Metadata| DB[(Database - MySQL)]
     Server -->|7. Konfirmasi| Client
     Client -->|8. Tampilkan Link| User
     Reader[Pembaca Publik] -->|9. Akses Link| Client
@@ -77,11 +77,11 @@ erDiagram
 ## 7. Tech Stack
 Berdasarkan kebutuhan aplikasi dan standar industri untuk pengembangan yang efisien, berikut adalah rekomendasi teknologi yang akan digunakan:
 
-- **Frontend Framework:** **Next.js** (Berbasis React sesuai permintaan, memungkinkan performa SEO yang baik untuk halaman buku publik).
+- **Frontend Framework:** **Next.js** (Berbasis React, memungkinkan performa SEO yang baik untuk halaman buku publik dan interaksi UI yang responsif).
 - **Styling:** **Tailwind CSS** (Untuk desain responsif dan cepat) + **shadcn/ui** (Komponen UI standar yang bersih).
-- **Backend & API:** **Next.js API Routes** (Fullstack dalam satu framework).
-- **Database:** **SQLite** (Ringan dan mudah untuk awal, dikelola via **Drizzle ORM**).
-- **Autentikasi:** **Better Auth** (Menangani login/register dengan aman).
+- **Backend & API:** **PHP Native** (Tanpa framework berat, menggunakan PDO/MySQLi untuk koneksi database yang efisien dan kontrol penuh).
+- **Database:** **MySQL** (Database relasional yang robust, skalabel, dan standar industri untuk hosting PHP).
+- **Autentikasi:** **PHP Session & Password Hashing** (Ditangani langsung di backend PHP untuk keamanan akun).
 - **File Storage:** **Local Storage** (untuk awal) atau **AWS S3/Cloudflare R2** (untuk produksi skalabel).
-- **Deployment:** **Vercel** (Paling optimal untuk Next.js).
-- **Flipbook Library:** **react-pageflip** atau sejenisnya (Untuk efek balik halaman).
+- **Deployment:** **VPS / Cloud Hosting** (Seperti DigitalOcean, Linode, atau Shared Hosting yang mendukung PHP & MySQL).
+- **Flipbook Library:** **react-pageflip** atau sejenisnya (Untuk efek balik halaman di sisi Frontend).
