@@ -24,7 +24,9 @@ const PageContent = React.forwardRef(({ pageNumber, width, height }, ref) => {
                 renderAnnotationLayer={false}
                 className="pointer-events-none"
                 loading={
-                    <div className="flex items-center justify-center h-full text-gray-400">Loading page {pageNumber}...</div>
+                    <div className="flex items-center justify-center h-full">
+                        <div className="w-8 h-8 border-3 border-[#ABCC6E]/30 border-t-[#50734D] rounded-full animate-spin" />
+                    </div>
                 }
             />
             {/* Realistic inner spine shadow */}
@@ -155,9 +157,24 @@ export function BookViewer() {
                             file="/example.pdf"
                             onLoadSuccess={onDocumentLoadSuccess}
                             loading={
-                                <div className="flex flex-col items-center justify-center py-20 text-[#50734D] animate-pulse">
-                                    <div className="w-12 h-12 border-4 border-[#ABCC6E]/30 border-t-[#50734D] rounded-full animate-spin mb-4" />
-                                    <p className="font-bold">Memuat Dokumen...</p>
+                                <div className="flex flex-col items-center justify-center py-32 text-[#50734D]">
+                                    <div className="relative mb-8">
+                                        <div className="w-20 h-20 border-4 border-[#ABCC6E]/20 rounded-full" />
+                                        <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-t-[#50734D] rounded-full animate-spin" />
+                                        <img src="/logo_dark.png" alt="" className="absolute inset-0 m-auto w-8 h-8" />
+                                    </div>
+                                    <p className="text-xl font-black mb-2">Menyiapkan Flipbook</p>
+                                    <p className="text-sm text-[#50734D]/60 font-medium">Sedang memuat halaman dokumen...</p>
+                                    <div className="mt-6 w-48 h-1.5 bg-[#50734D]/10 rounded-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-[#50734D] to-[#ABCC6E] rounded-full animate-[loading_2s_ease-in-out_infinite]" style={{ width: '60%' }} />
+                                    </div>
+                                    <style>{`
+                                        @keyframes loading {
+                                            0% { transform: translateX(-100%); }
+                                            50% { transform: translateX(60%); }
+                                            100% { transform: translateX(-100%); }
+                                        }
+                                    `}</style>
                                 </div>
                             }
                             error={<div className="text-red-500 font-medium py-20 bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm">Gagal memuat PDF. Pastikan file example.pdf ada di folder public.</div>}
